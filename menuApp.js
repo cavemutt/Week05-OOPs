@@ -1,3 +1,4 @@
+// ~~~ I STARTED WITH A STORY
 // The unsung battle for Middle Earth has begun! 
 // The story... 
 // You are the leader of a small village, one that is unique in that it's residents are unusually diverse.
@@ -5,7 +6,7 @@
 //  A roaming hoard of orcs sees a village, one they were not expecting to see, but were more than eager to steal whatever food and treasures they could find while satisfying their delight in shedding blood... 
 // Many of the villagers have travelled to learn about the world, about fighting and magic, sharing their knowledge upon their return. As their leader, you must select a team to be the front line in the fight against these vicious invaders... 
 
-
+// ~~~ THE FOLLOWING WAS MY INITIAL BRAINSTORM OF WHAT I NEEDED TO ACCOMPLISH AND IDEAS
 // Character class as starting point for all characters 
 // name, race, starting stats, weapon method type stats(magic, blade, club, bow), attack method 
 // subclass Orcs with speed, power, stats randomize within orc range 
@@ -13,14 +14,14 @@
 // class for team selection 
 // class for menu interface and battle 
 // use name generator api(?)
-
+// WORKING OUT SOME DETAILS
 // orc/human/elf/ogre speed, power plus viciousness/hope/luck/bruteForce plus weapon type if suited to race dexterity/intelligence 
 // orc(club best, sword ok, magic minus, bow minus)
 // human(blade best, bow better, club ok, magic ok)
 // elf(magic best, bow better, blade ok, club minus)
 // ogre(club best, sword meh, bow minus, magic minus)
 // return stats
-
+//~~~ THIS IS THE MAIN CHARACTER CLASS
 class Character {
     constructor(name, race, weapon) {
         this.name = name;
@@ -36,7 +37,7 @@ class Character {
         let race = this.race;
         let weapon = this.weapon;
         let randomizer = (min, max) => Math.floor((Math.random() * (max - min)) + min)
-        
+// THIS RANDOMIZER CAUSED NUMBERS TO CHANGE EVERY TIME A CHAINED METHOD WAS CALLED - I FIXED SOME ISSUE WITH ADDING PROPERTIES, SOME I JUST COULDN'T GET TO WORK, MAYBE WITH MORE TIME AND PRACTICE I COULD FIGURE IT OUT  
         switch(race) {
             case "orc":
                 power = randomizer(6, 11)
@@ -98,6 +99,7 @@ class Character {
                     console.error('You did not enter a valid weapon')
                 }
                 break;
+//~~~ THIS DEFAULT ERROR IS ALERTED FURTHER DOWN
             default: 
                 console.error('You did not enter a valid race')
                 break;
@@ -105,6 +107,7 @@ class Character {
         this.characterStats.push(power, speed, weaponStat)
         return this.characterStats
     }
+//~~~ IT WAS A CHALLENGE TO FIGURE OUT WHERE TO CALL A METHOD VS WHERE THE LINKED PROPERTY WOULD BE BEST TO USE AND WHERE ANY OF IT WOULD EVEN WORK 
     calculateAttackStat() {       
         this.attackStat = this.characterStats[0] + this.characterStats[1] + this.characterStats[2]
         return this.attackStat
@@ -115,7 +118,7 @@ class Character {
         return `The ${this.race} ${this.name} wields a ${this.weapon}. ${'\n'}~~ Stats ~~ ${'\n'}Power: ${this.characterStats[0]}${'\n'}Speed: ${this.characterStats[1]}${'\n'}Weapon adds: ${this.characterStats[2]}`
     }
 }
-
+//~~~ THE FOLLOWING ARE SUBCLASSES EXTENDING THE CHARACTER CLASS 
 class Orc extends Character {
     constructor(name, race, weapon) {
         super(name, race, weapon);
@@ -183,7 +186,8 @@ class Ogre extends Character {
         return `${super.describe()}${'\n'}Brute Force: ${this.generateBruteForce()}${'\n'}for a total attack of: ${this.totalAttackStat()}`
     }
 }
-
+//~~~ THE BATTLETEAM CLASS CONTROLS THE TEAM ASPECTS, SOME OF IT BORROWED FROM THE CLASS EXAMPLES, MODIFIED FOR MY NEEDS 
+//~~~ IT WAS TEMPTING TO ALLOW MANY TEAMS TO BE MADE, BOTH HERO AND INVADING, LETTING THE USER CHOOSE WHO TO BATTLE ETC., BUT THIS TOOK LONGER THAN I THOUGHT AND AT SOME POINT WE JUST NEED TO SAY WHEN AND MOVE ON...HARHAR
 class BattleTeam {
     constructor(name) {
         this.name = name;
@@ -212,13 +216,13 @@ class BattleTeam {
         }
     }
 }
-
+//~~~ THE MENU CLASS AGAIN BORROWED FROM THE CLASS EXAMPLES BUT MODIFIED FOR MY NEEDS. I THOUGHT IT WOULD BE MOSTLY JUST CHANGING PROPERTY AND METHOD NAMES, BUT I DID NEED TO MODIFY IT QUITE A BIT MORE THAN THAT.
 class Menu {
     constructor() {
         this.battleTeams = [];
         this.heroTeamTotal = 0;
     }
-
+//~~~ I TRIED TO USE A SETTIMEOUT FOR A MORE CINEMATIC EFFECT, BUT GAVE UP AFTER A FEW TRIES. IT MIGHT NOT BE THE RIGHT PARADIGM FOR THAT, OR MAYBE I'M JUST TIRED
     start() {
         alert(`An unsung battle for Middle Earth has begun! 
         The story... 
@@ -260,7 +264,7 @@ class Menu {
         4) initiate attack! 
         `);
     }
-
+//~~~ TO ACCOUNT FOR THE CHANGING STATS DUE TO THE RANDOMIZER, I CHALKED IT UP TO "TEAM DYNAMICS" FOR NOW 
     showTeamMenuOptions(teamInfo) {
         return prompt(`
         *note: team stats will change depending on how well they are working together*
@@ -334,7 +338,7 @@ class Menu {
         }
     }
 
-
+//~~~ I DID WHAT I COULD TO MITIGATE MISTAKES AND NOT GOING IN THE RIGHT ORDER OF STEPS BY THE USER, BUT SOME OF THE ALERTS WERE DOING THEIR OWN THING AND AFTER MULTIPLE ERRORS THE GAME MIGHT CRASH. I TRIED BY BEST WITH THE TIME I HAD. 
     createWarrior() {
         if(this.battleTeams[0].teamLength === 3) {
             alert('This battle team has 3 members and is ready for battle!')
@@ -386,6 +390,7 @@ class Menu {
                 this.battleTeams[0].teamLength--
             }
         }
+//~~~ I FOUND MYSELF REPEATING CODE TO GET THINGS TO GO WHERE I WANTED, I BET THERE'S A SOLUTION OUT THERE I JUST HAVEN'T FOUND YET
         let description = 'Team name: ' + this.battleTeams[0].name + '\n';
         description += ' ' + this.battleTeams[0].describe() + '\n';
         for(let i = 0; i < this.battleTeams[0].characters.length; i++) {
@@ -418,3 +423,4 @@ class Menu {
 
 let menu = new Menu();
 menu.start()
+//~~~ OVERALL, THIS WAS A GREAT CHALLENGE AND LEARNING EXPERIENCE. I CAN SEE NOW WHY OOP MIGHT BE BEST COMBINED WITH FUNCTIONAL PROGRAMMING, EACH DOING WHAT THEY'RE BETTER AT. 
